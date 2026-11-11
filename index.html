@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zachary Taylor Archive | 12th President of the United States</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700;900&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FFF7D6',
+                            300: '#F5D061',
+                            400: '#E6B830',
+                            500: '#D4AF37',
+                            600: '#AA820A',
+                            700: '#856404',
+                            900: '#4D3800'
+                        },
+                        mahogany: {
+                            800: '#2C1810',
+                            900: '#1C0D07',
+                            950: '#0E0503'
+                        },
+                        parchment: {
+                            100: '#FDFBF7',
+                            200: '#F5EFE0',
+                            300: '#E8DDC4',
+                            800: '#4A402D'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['"Cinzel"', 'serif'],
+                        cinzelDeco: ['"Cinzel Decorative"', 'serif'],
+                        garamond: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0E0503;
+            color: #E8DDC4;
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF7D6 0%, #D4AF37 50%, #AA820A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-panel {
+            background: rgba(28, 13, 7, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.85), 0 0 15px rgba(212, 175, 55, 0.05);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.15);
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.4;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0E0503;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4D3800;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(212,175,55,0.1), rgba(212,175,55,0.6), rgba(212,175,55,0.1));
+        }
+
+        @media (max-width: 768px) {
+            .timeline-line::before {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500 selection:text-mahogany-950">
+
+    <!-- Ambient Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-gold-500/20 px-4 lg:px-8 py-3 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full border border-gold-400/50 flex items-center justify-center bg-mahogany-900 shadow-inner">
+                    <i class="fa-solid fa-shield-halved text-gold-400 text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-cinzel text-xs tracking-widest text-gold-400 block uppercase">Presidential Archive</span>
+                    <h1 class="font-cinzelDeco font-bold text-lg text-parchment-100 tracking-wider">ZACHARY TAYLOR</h1>
+                </div>
+            </div>
+
+            <!-- Global Action Bar -->
+            <div class="flex items-center space-x-6 text-sm font-sans text-parchment-200">
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#hero" class="hover:text-gold-400 transition-colors">Overview</a>
+                    <a href="#military" class="hover:text-gold-400 transition-colors">Military Heroics</a>
+                    <a href="#presidency" class="hover:text-gold-400 transition-colors">Presidency</a>
+                    <a href="#timeline" class="hover:text-gold-400 transition-colors">Chronology</a>
+                    <a href="#artifacts" class="hover:text-gold-400 transition-colors">Artifacts</a>
+                    <a href="#quiz" class="hover:text-gold-400 transition-colors">Quiz</a>
+                </nav>
+
+                <div class="flex items-center space-x-2 bg-mahogany-900 border border-gold-500/30 px-3 py-1 rounded-full text-xs">
+                    <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                    <span class="font-sans text-parchment-300">12th U.S. PRESIDENT</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-16 relative z-10">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="pt-4">
+            <div class="glass-panel rounded-2xl p-6 lg:p-10 relative overflow-hidden">
+                <!-- Background Accent Glow -->
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-gold-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left: Archival Portrait Frame -->
+                    <div class="lg:col-span-4 flex flex-col items-center">
+                        <div class="relative group">
+                            <!-- Golden Archival Frame Border -->
+                            <div class="absolute -inset-2 bg-gradient-to-r from-gold-600 via-gold-300 to-gold-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000"></div>
+                            
+                            <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-lg overflow-hidden bg-mahogany-950 border-2 border-gold-400 shadow-2xl flex flex-col items-center justify-between p-3 text-center">
+                                <div class="w-full h-full relative overflow-hidden rounded border border-gold-500/30 bg-mahogany-900 flex flex-col items-center justify-center">
+                                    
+                                    <!-- SVG Presidential Engraving Portrait Representation -->
+                                    <svg class="w-full h-full object-cover text-gold-500/30" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="240" fill="#1C0D07"/>
+                                        <!-- Oval frame -->
+                                        <ellipse cx="100" cy="110" rx="75" ry="90" stroke="#D4AF37" stroke-width="2" fill="#0E0503"/>
+                                        <!-- Shoulder silhouette -->
+                                        <path d="M30 220 C30 160, 170 160, 170 220 Z" fill="#2C1810" stroke="#D4AF37" stroke-width="1.5"/>
+                                        <!-- Epaulets (General) -->
+                                        <path d="M40 175 L65 185 L55 195 Z" fill="#D4AF37"/>
+                                        <path d="M160 175 L135 185 L145 195 Z" fill="#D4AF37"/>
+                                        <!-- Head outline -->
+                                        <circle cx="100" cy="95" r="40" fill="#2C1810" stroke="#D4AF37" stroke-width="1.5"/>
+                                        <!-- Hair detail -->
+                                        <path d="M65 85 C65 60, 135 60, 135 85 C120 70, 80 70, 65 85 Z" fill="#D4AF37" opacity="0.6"/>
+                                        <!-- Collar & Tie -->
+                                        <path d="M85 135 L100 165 L115 135 Z" fill="#F5EFE0"/>
+                                        <path d="M96 135 L100 175 L104 135 Z" fill="#0E0503"/>
+                                        <!-- Engraving background lines -->
+                                        <line x1="0" y1="40" x2="200" y2="40" stroke="rgba(212,175,55,0.08)" stroke-width="1"/>
+                                        <line x1="0" y1="80" x2="200" y2="80" stroke="rgba(212,175,55,0.08)" stroke-width="1"/>
+                                        <line x1="0" y1="120" x2="200" y2="120" stroke="rgba(212,175,55,0.08)" stroke-width="1"/>
+                                        <line x1="0" y1="160" x2="200" y2="160" stroke="rgba(212,175,55,0.08)" stroke-width="1"/>
+                                    </svg>
+
+                                    <div class="absolute inset-0 bg-gradient-to-t from-mahogany-950 via-transparent to-transparent"></div>
+                                    <div class="absolute bottom-3 left-0 right-0 px-3">
+                                        <span class="inline-block px-3 py-1 bg-gold-500 text-mahogany-950 font-cinzel font-bold text-xs rounded tracking-widest shadow uppercase">
+                                            "Old Rough and Ready"
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bio Quick Info Badge -->
+                        <div class="mt-4 text-center space-y-1">
+                            <span class="font-cinzel text-gold-400 font-bold text-sm block">1784 – 1850</span>
+                            <span class="font-sans text-xs text-parchment-300/80">Term: March 4, 1849 – July 9, 1850</span>
+                        </div>
+                    </div>
+
+                    <!-- Middle & Right: Overview & Quote -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="space-y-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-1 rounded bg-gold-500/10 border border-gold-500/30 font-cinzel text-xs text-gold-400 tracking-widest">
+                                    NATIONAL HERO • WHIG PARTY
+                                </span>
+                                <span class="text-xs font-sans text-parchment-300/60">40-Year Military Career</span>
+                            </div>
+
+                            <h1 class="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-parchment-100 leading-tight">
+                                General Zachary Taylor
+                            </h1>
+                            <h2 class="font-cinzelDeco text-xl sm:text-2xl text-gold-400 font-semibold tracking-wide">
+                                Military Titan & Defender of the Union
+                            </h2>
+                        </div>
+
+                        <blockquote class="p-4 border-l-4 border-gold-400 bg-mahogany-900/60 rounded-r-lg italic text-lg text-parchment-200 leading-relaxed font-garamond shadow-inner">
+                            "I have no private feelings to indulge, no personal preferences to gratify, no party obligations to perform. My guide shall be the Constitution."
+                        </blockquote>
+
+                        <p class="font-sans text-sm sm:text-base text-parchment-200/90 leading-relaxed font-light">
+                            Zachary Taylor was a career officer in the United States Army who rose to national fame as a major general during the Mexican-American War. Known affectionately by his troops as <strong class="text-gold-300">"Old Rough and Ready"</strong> for his unpretentious dress and steadfast demeanor, he became the first U.S. president elected without having previously held public office. Despite being a Southern slaveholder, Taylor strongly opposed the expansion of slavery into new Western territories and fiercely threatened military action against Southern secessionists to preserve the Union.
+                        </p>
+
+                        <!-- Key Metrics Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                            <div class="bg-mahogany-900/80 border border-gold-500/20 p-3 rounded-lg text-center">
+                                <span class="block font-cinzel font-bold text-gold-400 text-lg">40 Years</span>
+                                <span class="text-xs font-sans text-parchment-300/70">U.S. Army Service</span>
+                            </div>
+                            <div class="bg-mahogany-900/80 border border-gold-500/20 p-3 rounded-lg text-center">
+                                <span class="block font-cinzel font-bold text-gold-400 text-lg">Buena Vista</span>
+                                <span class="text-xs font-sans text-parchment-300/70">Decisive 1847 Victory</span>
+                            </div>
+                            <div class="bg-mahogany-900/80 border border-gold-500/20 p-3 rounded-lg text-center">
+                                <span class="block font-cinzel font-bold text-gold-400 text-lg">Unionist</span>
+                                <span class="text-xs font-sans text-parchment-300/70">Anti-Secession Stance</span>
+                            </div>
+                            <div class="bg-mahogany-900/80 border border-gold-500/20 p-3 rounded-lg text-center">
+                                <span class="block font-cinzel font-bold text-gold-400 text-lg">16 Months</span>
+                                <span class="text-xs font-sans text-parchment-300/70">Presidency Duration</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MILITARY HEROICS SECTION -->
+        <section id="military" class="glass-panel rounded-2xl p-6 sm:p-10 space-y-8">
+            <div class="border-b border-gold-500/20 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-cinzel text-xs text-gold-400 tracking-widest block uppercase">Martial Valor & Campaigns</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-parchment-100">Military Heroics & Leadership</h2>
+                </div>
+                <div class="flex items-center space-x-2 text-gold-400 font-cinzel text-xs">
+                    <i class="fa-solid fa-award text-lg"></i>
+                    <span>MAJOR GENERAL U.S. ARMY</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Palo Alto & Resaca de la Palma -->
+                <div class="bg-mahogany-950/80 border border-gold-500/20 p-6 rounded-xl space-y-3 relative overflow-hidden group">
+                    <div class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 font-cinzel font-bold">
+                        1846
+                    </div>
+                    <h3 class="font-cinzel font-bold text-lg text-parchment-100">Battles of Palo Alto & Resaca de la Palma</h3>
+                    <p class="font-sans text-xs text-parchment-200/80 leading-relaxed">
+                        Opening major engagements of the Mexican-American War. Taylor’s effective deployment of flying artillery defeated superior numerical forces and secured northern Rio Grande territory.
+                    </p>
+                    <div class="text-[11px] font-sans text-gold-400/90 pt-2 border-t border-gold-500/10">
+                        <i class="fa-solid fa-location-crosshairs mr-1"></i> Rio Grande Border Region
+                    </div>
+                </div>
+
+                <!-- Battle of Monterrey -->
+                <div class="bg-mahogany-950/80 border border-gold-500/20 p-6 rounded-xl space-y-3 relative overflow-hidden group">
+                    <div class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 font-cinzel font-bold">
+                        1846
+                    </div>
+                    <h3 class="font-cinzel font-bold text-lg text-parchment-100">Battle of Monterrey</h3>
+                    <p class="font-sans text-xs text-parchment-200/80 leading-relaxed">
+                        Taylor led a grueling urban assault against fortified Mexican positions. After heavy fighting, he negotiated an 8-week armistice, demonstrating strategic restraint that drew both praise and political scrutiny from Washington.
+                    </p>
+                    <div class="text-[11px] font-sans text-gold-400/90 pt-2 border-t border-gold-500/10">
+                        <i class="fa-solid fa-building-columns mr-1"></i> Monterrey, Mexico
+                    </div>
+                </div>
+
+                <!-- Battle of Buena Vista -->
+                <div class="bg-mahogany-950/80 border border-gold-500/30 p-6 rounded-xl space-y-3 relative overflow-hidden group border-l-4 border-l-gold-400">
+                    <div class="w-10 h-10 rounded-full bg-gold-500/20 border border-gold-400 flex items-center justify-center text-gold-300 font-cinzel font-bold">
+                        1847
+                    </div>
+                    <h3 class="font-cinzel font-bold text-lg text-parchment-100">The Battle of Buena Vista</h3>
+                    <p class="font-sans text-xs text-parchment-200/80 leading-relaxed">
+                        Taylor's crowning achievement. With only 4,700 men against General Santa Anna’s force of over 15,000, Taylor held the mountain pass, catapulting him to legendary national status and the Whig nomination.
+                    </p>
+                    <div class="text-[11px] font-sans text-gold-400/90 pt-2 border-t border-gold-500/10">
+                        <i class="fa-solid fa-crown mr-1"></i> Decisive National Fame
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRESIDENCY & SECTIONAL CRISIS -->
+        <section id="presidency" class="glass-panel rounded-2xl p-6 sm:p-10 space-y-8">
+            <div class="border-b border-gold-500/20 pb-4">
+                <span class="font-cinzel text-xs text-gold-400 tracking-widest block uppercase">Executive Stewardship</span>
+                <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-parchment-100">Presidency & The Sectional Crisis (1849–1850)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-4">
+                    <h3 class="font-cinzel text-xl font-bold text-gold-300">Stance on Slavery Expansion & Secession</h3>
+                    <p class="font-sans text-sm text-parchment-200/90 leading-relaxed">
+                        Though Taylor owned plantations in Louisiana and Mississippi, he surprised Southern leaders by taking a firm nationalist stance. He urged California and New Mexico to draft state constitutions and apply directly for statehood, bypassing territorial status where slavery could be debated.
+                    </p>
+                    <p class="font-sans text-sm text-parchment-200/90 leading-relaxed">
+                        When Southern leaders threatened secession over the admission of California as a free state, Taylor forcefully declared that he would personally lead the army to hang anyone caught in rebellion against the Union.
+                    </p>
+                    
+                    <div class="p-4 bg-mahogany-950 border border-gold-500/30 rounded-xl space-y-2">
+                        <h4 class="font-cinzel text-sm font-bold text-gold-400"><i class="fa-solid fa-scroll mr-2"></i>Clayton-Bulwer Treaty (1850)</h4>
+                        <p class="font-sans text-xs text-parchment-300/80">
+                            On the foreign policy front, Secretary of State John M. Clayton negotiated an agreement with Great Britain ensuring that any future canal across Central America connecting the Atlantic and Pacific oceans would be neutral and unfortified.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-mahogany-950/80 border border-gold-500/20 p-6 rounded-xl space-y-4 flex flex-col justify-between">
+                    <div>
+                        <span class="font-cinzel text-xs text-gold-400 tracking-widest uppercase block mb-1">Untimely Tragic End</span>
+                        <h3 class="font-cinzel text-lg font-bold text-parchment-100">Sudden Death in Office</h3>
+                        <p class="font-sans text-xs text-parchment-200/80 leading-relaxed mt-2">
+                            On July 4, 1850, during fundraising ceremonies at the unfinished Washington Monument, President Taylor consumed raw cherries and iced milk on a scorching day. He fell severely ill with acute gastroenteritis (cholera morbus) and passed away five days later on July 9, 1850.
+                        </p>
+                    </div>
+                    
+                    <div class="border-t border-gold-500/20 pt-4">
+                        <span class="font-sans text-[11px] text-parchment-300/60 block">Succeeded by Vice President Millard Fillmore, who subsequently signed the Compromise of 1850 into law.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHRONOLOGICAL TIMELINE -->
+        <section id="timeline" class="glass-panel rounded-2xl p-6 sm:p-10 space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="font-cinzel text-xs text-gold-400 tracking-widest block uppercase">Life & Epoch</span>
+                <h2 class="font-cinzel text-3xl font-bold text-parchment-100">Chronology of Zachary Taylor</h2>
+                <p class="font-sans text-xs text-parchment-300/80">Filter events by military service, presidency, or early life.</p>
+            </div>
+
+            <!-- Timeline Filter Controls -->
+            <div class="flex justify-center space-x-2" id="timeline-filters">
+                <button class="px-3.5 py-1.5 rounded-full bg-gold-500 text-mahogany-950 font-sans text-xs font-bold tl-btn active" data-filter="all">All Events</button>
+                <button class="px-3.5 py-1.5 rounded-full bg-mahogany-900 border border-gold-500/30 text-parchment-200 font-sans text-xs hover:border-gold-400 tl-btn" data-filter="military">Military</button>
+                <button class="px-3.5 py-1.5 rounded-full bg-mahogany-900 border border-gold-500/30 text-parchment-200 font-sans text-xs hover:border-gold-400 tl-btn" data-filter="presidency">Presidency</button>
+            </div>
+
+            <!-- Timeline Grid -->
+            <div class="relative timeline-line space-y-8 py-4" id="timeline-container">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- PRIMARY SOURCE ARTIFACTS & LETTERS GALLERY -->
+        <section id="artifacts" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <span class="font-cinzel text-xs text-gold-400 tracking-widest block uppercase">Archival Repository</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-parchment-100">Primary Source Artifacts & Manuscripts</h2>
+                </div>
+                
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gold-400 text-xs"></i>
+                    <input type="text" id="artifact-search" placeholder="Search manuscripts..." class="bg-mahogany-950 border border-gold-500/30 rounded-full pl-9 pr-4 py-1.5 text-xs text-parchment-100 focus:outline-none focus:border-gold-400 w-64 font-sans">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="artifacts-grid">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- KNOWLEDGE ASSESSMENT QUIZ -->
+        <section id="quiz" class="glass-panel rounded-2xl p-6 sm:p-10 space-y-6 border-gold-400/40">
+            <div class="flex items-center justify-between border-b border-gold-500/20 pb-4">
+                <div>
+                    <span class="font-cinzel text-xs text-gold-400 tracking-widest block uppercase">Interactive Assessment</span>
+                    <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-parchment-100">Test Your Knowledge: Zachary Taylor</h2>
+                </div>
+                <div class="px-4 py-1.5 bg-mahogany-900 border border-gold-500/40 rounded-full font-cinzel text-xs text-gold-300">
+                    <i class="fa-solid fa-graduation-cap mr-1"></i> Quiz Mode
+                </div>
+            </div>
+
+            <div id="quiz-container" class="space-y-6">
+                <!-- Filled via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gold-500/20 bg-mahogany-950 py-10 mt-16 text-center text-xs font-sans text-parchment-300/60 space-y-3">
+        <div class="font-cinzel text-sm text-gold-400 font-bold tracking-wider">ZACHARY TAYLOR ARCHIVAL PRESERVATION</div>
+        <p>Documenting the Military Career and 12th Executive Administration of the United States.</p>
+        <p class="text-[10px] text-gold-500/40">Historical Resources • Primary Sources • Educational Platform</p>
+    </footer>
+
+    <!-- ARTIFACT PREVIEW MODAL -->
+    <div id="artifact-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden">
+        <div class="glass-panel max-w-2xl w-full rounded-2xl p-6 sm:p-8 space-y-6 relative border-gold-400">
+            <button id="close-artifact-modal" class="absolute top-4 right-4 text-parchment-300 hover:text-gold-400 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="artifact-modal-content">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // -------------------------------------------------------------
+        // 1. AMBIENT PARCHMENT PARTICLE CANVAS
+        // -------------------------------------------------------------
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class DustParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * 0.3 + 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) this.reset();
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#D4AF37';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: 35 }, () => new DustParticle());
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        // -------------------------------------------------------------
+        // 2. TIMELINE DATA & INTERACTIVITY
+        // -------------------------------------------------------------
+        const timelineEvents = [
+            {
+                year: '1784',
+                title: 'Birth in Barboursville, Virginia',
+                type: 'early',
+                desc: 'Born on November 24, 1784, into a prominent Virginian family of English ancestry that soon migrated to Louisville, Kentucky.'
+            },
+            {
+                year: '1808',
+                title: 'Commissioned in the U.S. Army',
+                type: 'military',
+                desc: 'Appointed First Lieutenant in the 7th Infantry Regiment by President Thomas Jefferson, launching a 40-year military career.'
+            },
+            {
+                year: '1812',
+                title: 'Defense of Fort Harrison (War of 1812)',
+                type: 'military',
+                desc: 'Led a small garrison to successfully repel a major Native American assault supported by Tecumseh, earning a brevet promotion to Major.'
+            },
+            {
+                year: '1837',
+                title: 'Second Seminole War & Lake Okeechobee',
+                type: 'military',
+                desc: 'Commanded U.S. troops in Florida at the Battle of Lake Okeechobee, earning promotion to Brigadier General and command of Florida forces.'
+            },
+            {
+                year: '1846',
+                title: 'Outbreak of Mexican-American War',
+                type: 'military',
+                desc: 'Commanded the Army of Occupation along the Rio Grande, achieving victory at Palo Alto and Resaca de la Palma.'
+            },
+            {
+                year: '1847',
+                title: 'Victory at Buena Vista & National Renown',
+                type: 'military',
+                desc: 'Defeated General Santa Anna’s numerical force at Buena Vista, becoming a national hero known as "Old Rough and Ready".'
+            },
+            {
+                year: '1848',
+                title: 'Elected 12th President of the United States',
+                type: 'presidency',
+                desc: 'Nominated by the Whig Party, Taylor won the presidential election against Democrat Lewis Cass and Free Soil candidate Martin Van Buren.'
+            },
+            {
+                year: '1849',
+                title: 'Inauguration & California Statehood Stance',
+                type: 'presidency',
+                desc: 'Inaugurated on March 5, 1849. Encouraged California to apply directly for statehood as a free state, sparking Southern backlash.'
+            },
+            {
+                year: '1850',
+                title: 'Sudden Death in Office',
+                type: 'presidency',
+                desc: 'Fell ill after July 4th celebrations and died on July 9, 1850. Succeeded by Vice President Millard Fillmore.'
+            }
+        ];
+
+        function renderTimeline(filter = 'all') {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' ? timelineEvents : timelineEvents.filter(e => e.type === filter);
+
+            filtered.forEach((e, idx) => {
+                const isEven = idx % 2 === 0;
+                const item = document.createElement('div');
+                item.className = `relative flex flex-col md:flex-row items-center justify-between ${isEven ? 'md:flex-row-reverse' : ''}`;
+                
+                item.innerHTML = `
+                    <div class="w-full md:w-5/12 ${isEven ? 'text-left' : 'md:text-right text-left'} space-y-1 p-4 bg-mahogany-950/70 border border-gold-500/20 rounded-xl hover:border-gold-400 transition-colors">
+                        <span class="font-cinzel text-xs text-gold-400 font-bold tracking-widest">${e.year}</span>
+                        <h4 class="font-cinzel text-base font-bold text-parchment-100">${e.title}</h4>
+                        <p class="font-sans text-xs text-parchment-300/80 leading-relaxed">${e.desc}</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-gold-500 border-4 border-mahogany-950 my-2 md:my-0 flex items-center justify-center font-cinzel font-bold text-mahogany-950 text-xs shadow-lg z-10">
+                        <i class="fa-solid fa-star text-[9px]"></i>
+                    </div>
+                    <div class="w-full md:w-5/12"></div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        renderTimeline();
+
+        document.querySelectorAll('.tl-btn').forEach(btn => {
+            btn.addEventListener('click', (ev) => {
+                document.querySelectorAll('.tl-btn').forEach(b => {
+                    b.classList.remove('bg-gold-500', 'text-mahogany-950');
+                    b.classList.add('bg-mahogany-900', 'text-parchment-200');
+                });
+                ev.target.classList.remove('bg-mahogany-900', 'text-parchment-200');
+                ev.target.classList.add('bg-gold-500', 'text-mahogany-950');
+                renderTimeline(ev.target.getAttribute('data-filter'));
+            });
+        });
+
+        // -------------------------------------------------------------
+        // 3. ARTIFACTS GALLERY DATA & MODAL
+        // -------------------------------------------------------------
+        const artifactsData = [
+            {
+                id: 'art-1',
+                title: 'Dispatch from Buena Vista',
+                date: 'February 24, 1847',
+                category: 'Military Dispatch',
+                summary: 'Official report detailing the defensive victory over Santa Anna’s army in northern Mexico.',
+                fullText: '"Headquarters, Army of Occupation, Buena Vista. Sir: I have the honor to report that the enemy attacked our position in great force on the 22nd... The troops held their ground with unflinching courage..."'
+            },
+            {
+                id: 'art-2',
+                title: 'Letter to Jefferson Davis',
+                date: 'July 1848',
+                category: 'Personal Correspondence',
+                summary: 'Letter to his son-in-law Jefferson Davis regarding military pension and political neutrality.',
+                fullText: '"My dear Colonel: I have never sought the Presidency nor requested any nomination. My devotion remains first and foremost to the preservation of our Constitutional Republic..."'
+            },
+            {
+                id: 'art-3',
+                title: 'Annual Message to Congress',
+                date: 'December 4, 1849',
+                category: 'Presidential Address',
+                summary: 'Taylor’s first and only State of the Union message advocating for California statehood.',
+                fullText: '"I recommend that California be admitted at once into the Union with the constitution which her people have adopted. We should abstain from introducing sectional topics of exciting character..."'
+            },
+            {
+                id: 'art-4',
+                title: 'Clayton-Bulwer Treaty Text',
+                date: 'April 19, 1850',
+                category: 'Executive Treaty',
+                summary: 'Treaty between the US and Great Britain concerning a future trans-isthmian canal.',
+                fullText: '"The Governments of the United States and Great Britain hereby declare that neither will ever obtain or maintain for itself any exclusive control over the said ship canal..."'
+            },
+            {
+                id: 'art-5',
+                title: '1848 Whig Campaign Ribbon',
+                date: '1848 Campaign',
+                category: 'Political Memorabilia',
+                summary: 'Silk campaign badge depicting General Taylor atop his horse Old Whitey.',
+                fullText: '"Rough and Ready - Zachary Taylor for President. The Hero of Palo Alto, Resaca de la Palma, Monterrey, and Buena Vista."'
+            }
+        ];
+
+        function renderArtifacts(query = '') {
+            const grid = document.getElementById('artifacts-grid');
+            grid.innerHTML = '';
+
+            const filtered = artifactsData.filter(a => 
+                a.title.toLowerCase().includes(query.toLowerCase()) || 
+                a.category.toLowerCase().includes(query.toLowerCase()) ||
+                a.summary.toLowerCase().includes(query.toLowerCase())
+            );
+
+            filtered.forEach(art => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel rounded-xl p-5 space-y-3 flex flex-col justify-between hover:-translate-y-1 transition-transform';
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs font-sans">
+                            <span class="px-2 py-0.5 rounded bg-gold-500/20 text-gold-300 font-semibold">${art.category}</span>
+                            <span class="text-parchment-300/60">${art.date}</span>
+                        </div>
+                        <h3 class="font-cinzel text-lg font-bold text-parchment-100">${art.title}</h3>
+                        <p class="font-sans text-xs text-parchment-200/80 leading-relaxed">${art.summary}</p>
+                    </div>
+                    <button onclick="openArtifactModal('${art.id}')" class="w-full py-2 rounded-lg bg-mahogany-950 border border-gold-500/30 text-gold-300 font-cinzel text-xs font-bold hover:bg-gold-500/20 transition-colors flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-scroll text-xs"></i>
+                        <span>Examine Transcript</span>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        renderArtifacts();
+
+        document.getElementById('artifact-search').addEventListener('input', (e) => {
+            renderArtifacts(e.target.value);
+        });
+
+        function openArtifactModal(id) {
+            const art = artifactsData.find(a => a.id === id);
+            if (!art) return;
+
+            const content = document.getElementById('artifact-modal-content');
+            content.innerHTML = `
+                <div class="space-y-4 text-left">
+                    <span class="px-3 py-1 rounded bg-gold-500 text-mahogany-950 font-cinzel text-xs font-bold uppercase">${art.category}</span>
+                    <h3 class="font-cinzel text-2xl font-bold text-parchment-100">${art.title}</h3>
+                    <div class="text-xs font-sans text-gold-400">Date: ${art.date}</div>
+                    <blockquote class="p-4 bg-mahogany-950 border-l-2 border-gold-400 font-garamond italic text-parchment-200 text-sm leading-relaxed">
+                        ${art.fullText}
+                    </blockquote>
+                    <p class="font-sans text-xs text-parchment-300/80">${art.summary}</p>
+                </div>
+            `;
+            document.getElementById('artifact-modal').classList.remove('hidden');
+        }
+
+        document.getElementById('close-artifact-modal').addEventListener('click', () => {
+            document.getElementById('artifact-modal').classList.add('hidden');
+        });
+
+        // -------------------------------------------------------------
+        // 4. INTERACTIVE QUIZ ASSESSMENT
+        // -------------------------------------------------------------
+        const quizQuestions = [
+            {
+                q: "What was Zachary Taylor's famous military nickname?",
+                options: ["Old Rough and Ready", "Old Hickory", "The Hero of Tippecanoe", "Old Fuss and Feathers"],
+                correct: 0,
+                explain: "Taylor earned the moniker 'Old Rough and Ready' due to his unpretentious dress, informal leadership style, and willingness to share hardship with his soldiers."
+            },
+            {
+                q: "Which decisive 1847 Mexican-American War battle made Taylor a national hero?",
+                options: ["Battle of Chapultepec", "Battle of Buena Vista", "Battle of Vera Cruz", "Battle of Palo Alto"],
+                correct: 1,
+                explain: "At Buena Vista, Taylor’s force of 4,700 men repelled General Santa Anna’s army of over 15,000, establishing his status as a national presidential contender."
+            },
+            {
+                q: "What political party nominated Zachary Taylor for the presidency in 1848?",
+                options: ["Democratic Party", "Free Soil Party", "Whig Party", "Federalist Party"],
+                correct: 2,
+                explain: "The Whig Party nominated Taylor because of his widespread popularity, despite his lack of prior political experience or party activism."
+            },
+            {
+                q: "How did Southern slaveholders react to Taylor's stance on California statehood?",
+                options: ["They strongly supported him", "They were outraged by his Unionist anti-expansion stance", "They remained neutral", "They awarded him a medal"],
+                correct: 1,
+                explain: "Although Taylor owned slaves, he opposed expanding slavery into newly acquired territories and threatened military force against Southern secessionists."
+            },
+            {
+                q: "Who succeeded Zachary Taylor after his sudden death in July 1850?",
+                options: ["Franklin Pierce", "Millard Fillmore", "James K. Polk", "Winfield Scott"],
+                correct: 1,
+                explain: "Vice President Millard Fillmore succeeded Taylor upon his death and signed the Compromise of 1850 into law shortly after."
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (currentQ >= quizQuestions.length) {
+                container.innerHTML = `
+                    <div class="text-center py-8 space-y-4">
+                        <i class="fa-solid fa-trophy text-gold-400 text-4xl"></i>
+                        <h3 class="font-cinzel text-2xl font-bold text-parchment-100">Assessment Complete</h3>
+                        <p class="font-sans text-sm text-parchment-200">You scored <strong class="text-gold-300 text-lg">${score}</strong> out of ${quizQuestions.length}</p>
+                        <button onclick="resetQuiz()" class="px-6 py-2 rounded-full bg-gold-500 text-mahogany-950 font-cinzel font-bold text-xs hover:bg-gold-400 transition-colors">
+                            Retake Assessment
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const qData = quizQuestions[currentQ];
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between text-xs font-sans text-gold-400">
+                        <span>Question ${currentQ + 1} of ${quizQuestions.length}</span>
+                        <span>Score: ${score}</span>
+                    </div>
+                    <h3 class="font-cinzel text-lg font-bold text-parchment-100">${qData.q}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                        ${qData.options.map((opt, i) => `
+                            <button onclick="answerQuiz(${i})" class="p-3 bg-mahogany-950 border border-gold-500/30 hover:border-gold-400 rounded-lg text-left font-sans text-xs text-parchment-200 hover:text-gold-300 transition-colors">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function answerQuiz(selected) {
+            const qData = quizQuestions[currentQ];
+            const container = document.getElementById('quiz-container');
+            const isCorrect = selected === qData.correct;
+            if (isCorrect) score++;
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg border ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-rose-950/40 border-rose-500/40 text-rose-200'}">
+                        <h4 class="font-cinzel font-bold text-sm mb-1">${isCorrect ? '<i class="fa-solid fa-circle-check mr-1"></i> Correct!' : '<i class="fa-solid fa-circle-xmark mr-1"></i> Incorrect'}</h4>
+                        <p class="font-sans text-xs leading-relaxed">${qData.explain}</p>
+                    </div>
+                    <button onclick="nextQuestion()" class="px-6 py-2 rounded-full bg-gold-500 text-mahogany-950 font-cinzel font-bold text-xs hover:bg-gold-400 transition-colors">
+                        Next Question
+                    </button>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            renderQuiz();
+        }
+
+        function resetQuiz() {
+            currentQ = 0;
+            score = 0;
+            renderQuiz();
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
